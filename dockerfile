@@ -1,7 +1,7 @@
 # -----------------------------------------------------------------------------
 # Stage 1: Builder
 # -----------------------------------------------------------------------------
-FROM python:3.11-slim AS builder
+FROM python:3.12.13-slim AS builder
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
@@ -9,9 +9,11 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=1
 
 # Build dependencies
+# Added git/g++ elements in case PaddleOCR fallback dependencies require source compilation on 3.12
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     libmagic-dev \
+    git \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /build
@@ -22,15 +24,14 @@ COPY requirements.txt .
 RUN python -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
-# Upgrade pip and install dependencies
-# Using --no-cache-dir reduces image size during build
-RUN pip install --upgrade pip && \
+# Upgrade deployment tools first, then install requirements
+RUN pip install --upgrade pip setuptools wheel && \
     pip install -r requirements.txt
 
 # -----------------------------------------------------------------------------
 # Stage 2: Runtime
 # -----------------------------------------------------------------------------
-FROM python:3.11-slim
+FROM python:3.12.13-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
@@ -73,6 +74,5 @@ EXPOSE 8000
 
 HEALTHCHECK --interval=10m --timeout=10s --start-period=10m --retries=3 \
   CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')" || exit 1
-
 
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
