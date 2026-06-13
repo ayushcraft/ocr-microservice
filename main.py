@@ -110,6 +110,8 @@ def load_ocr():
         det_limit_side_len=1280,  # Higher resolution for small text
     )
 
+#hello
+
 
 
 
