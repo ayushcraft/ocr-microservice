@@ -1,23 +1,23 @@
 # -----------------------------------------------------------------------------
 # Web Framework & Server
 # -----------------------------------------------------------------------------
-fastapi==0.136.3
-uvicorn[standard]==0.49.0
-python-multipart==0.0.32
+fastapi==0.111.0
+uvicorn[standard]==0.30.1
+python-multipart==0.0.9
 
 # -----------------------------------------------------------------------------
 # Image Processing & Preprocessing Pipeline
 # -----------------------------------------------------------------------------
-opencv-python-headless==4.13.0.92
-Pillow==12.2.0
-# Updated to NumPy 2.x to satisfy OpenCV 4.13+ requirement
-numpy==2.2.6
+opencv-python-headless==4.8.1.78
+Pillow==10.3.0
+# PaddlePaddle 2.6.2 requires NumPy 1.x
+numpy==1.26.4
 
 # -----------------------------------------------------------------------------
-# OCR Engine & Context Ecosystem
+# OCR Engine & Context Ecosystem (Stable 2.x Branch)
 # -----------------------------------------------------------------------------
-paddlepaddle==3.3.1
-paddleocr==3.6.0
+paddlepaddle==2.6.2
+paddleocr==2.8.1
 
 # -----------------------------------------------------------------------------
 # Security & Utilities
